@@ -258,11 +258,15 @@ export function LessonView() {
   );
 }
 
-function safeParse(s: string | null | undefined): any {
-  if (!s) return null;
-  try {
-    return JSON.parse(s);
-  } catch {
-    return null;
+function safeParse(v: any): any {
+  if (Array.isArray(v)) return v;
+  if (v && typeof v === "object") return v;
+  if (typeof v === "string") {
+    try {
+      return JSON.parse(v);
+    } catch {
+      return [];
+    }
   }
+  return [];
 }
