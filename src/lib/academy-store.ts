@@ -1,14 +1,15 @@
 /**
- * Zustand store — central app state for the Academy app.
- * Holds the current view, selected curriculum, grade, subject, lesson, exam,
- * mind map, progress tracking, and student identity.
+ * EduGene Zustand store — central app state.
+ * Holds navigation, selections, auth, progress, XP, badges, streaks.
  */
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { AgeBand } from "@/lib/age-bands";
 
 export type View =
   | "home"
+  | "auth"
   | "subjects"
   | "lessons"
   | "lesson"
@@ -17,17 +18,25 @@ export type View =
   | "exam"
   | "mindmaps"
   | "mindmap"
+  | "dashboard"
+  | "flashcards"
+  | "notes"
+  | "ai-tutor"
+  | "audio"
   | "progress"
+  | "achievements"
   | "downloads"
-  | "docs";
+  | "docs"
+  | "parent";
 
 export interface ProgressItem {
   itemId: string;
-  itemType: "lesson" | "quiz" | "exam";
+  itemType: "lesson" | "quiz" | "exam" | "flashcard" | "lesson-note";
   status: "not-started" | "in-progress" | "completed";
   scorePercent?: number | null;
   bestScore?: number | null;
   attempts: number;
+  xpEarned?: number;
 }
 
 export interface AchievementItem {
@@ -38,7 +47,38 @@ export interface AchievementItem {
   unlockedAt: string;
 }
 
-interface AcademyState {
+export interface BadgeItem {
+  code: string;
+  title: string;
+  description: string;
+  icon: string;
+  tier: string;
+  xpReward: number;
+  unlockedAt: string;
+}
+
+export interface QuestItem {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  target: number;
+  progress: number;
+  xpReward: number;
+  completed: boolean;
+}
+
+export interface UserSession {
+  id: string;
+  name: string | null;
+  email: string | null;
+  image: string | null;
+  role: string;
+  gradeLevel: number | null;
+  ageBand: string | null;
+}
+
+interface EduGeneState {
   // Navigation
   view: View;
   setView: (v: View) => void;
@@ -58,18 +98,32 @@ interface AcademyState {
   setExam: (id: string | null) => void;
   setMindMap: (id: string | null) => void;
 
-  // Student identity
+  // Student identity (legacy fallback for non-auth)
   studentKey: string;
   setStudentKey: (k: string) => void;
 
-  // Progress + achievements (in-memory mirror of server)
+  // Auth
+  user: UserSession | null;
+  setUser: (u: UserSession | null) => void;
+
+  // Progress + gamification
   progress: Record<string, ProgressItem>;
   achievements: AchievementItem[];
+  badges: BadgeItem[];
+  quests: QuestItem[];
+  totalXp: number;
+  currentStreak: number;
+  longestStreak: number;
   setProgress: (items: ProgressItem[]) => void;
   upsertProgress: (item: ProgressItem) => void;
   setAchievements: (items: AchievementItem[]) => void;
+  setBadges: (items: BadgeItem[]) => void;
+  setQuests: (items: QuestItem[]) => void;
+  setTotalXp: (xp: number) => void;
+  addXp: (xp: number) => void;
+  setStreak: (current: number, longest: number) => void;
 
-  // Online/offline status
+  // Online/offline
   isOnline: boolean;
   setOnline: (b: boolean) => void;
 
@@ -81,7 +135,7 @@ interface AcademyState {
 const keyOf = (item: { itemId: string; itemType: string }) =>
   `${item.itemType}:${item.itemId}`;
 
-export const useAcademy = create<AcademyState>()(
+export const useAcademy = create<EduGeneState>()(
   persist(
     (set, get) => ({
       view: "home",
@@ -101,16 +155,24 @@ export const useAcademy = create<AcademyState>()(
       setExam: (id) => set({ examId: id }),
       setMindMap: (id) => set({ mindMapId: id }),
 
-      studentKey: "student-anon", // initialized client-side in mounted effect
+      studentKey: "student-anon",
       setStudentKey: (k) => {
         if (typeof window !== "undefined") {
           localStorage.setItem("academy.studentKey", k);
         }
-        set({ studentKey: k, progress: {}, achievements: [] });
+        set({ studentKey: k, progress: {}, achievements: [], badges: [], quests: [], totalXp: 0 });
       },
+
+      user: null,
+      setUser: (u) => set({ user: u }),
 
       progress: {},
       achievements: [],
+      badges: [],
+      quests: [],
+      totalXp: 0,
+      currentStreak: 0,
+      longestStreak: 0,
       setProgress: (items) => {
         const map: Record<string, ProgressItem> = {};
         for (const it of items) map[keyOf(it)] = it;
@@ -121,8 +183,14 @@ export const useAcademy = create<AcademyState>()(
         set({ progress: { ...get().progress, [k]: item } });
       },
       setAchievements: (items) => set({ achievements: items }),
+      setBadges: (items) => set({ badges: items }),
+      setQuests: (items) => set({ quests: items }),
+      setTotalXp: (xp) => set({ totalXp: xp }),
+      addXp: (xp) => set({ totalXp: get().totalXp + xp }),
+      setStreak: (current, longest) =>
+        set({ currentStreak: current, longestStreak: longest }),
 
-      isOnline: true, // initialized client-side in mounted effect
+      isOnline: true,
       setOnline: (b) => set({ isOnline: b }),
 
       dark: false,
@@ -135,7 +203,7 @@ export const useAcademy = create<AcademyState>()(
       },
     }),
     {
-      name: "academy-store",
+      name: "edugene-store",
       skipHydration: true,
       partialize: (s) => ({
         curriculumId: s.curriculumId,

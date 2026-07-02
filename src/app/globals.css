@@ -37,79 +37,380 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-xp: var(--xp);
+  --color-streak: var(--streak);
+  --color-quest: var(--quest);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* =========================================================
+   EduGene Brand System — Default (Scholars / G7-12)
+   Palette: Deep emerald + warm amber accents on cream
+   Mascot: "Gene the Owl" — wise, focused
+   ========================================================= */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --radius: 0.75rem;
+
+  /* Core surfaces */
+  --background: oklch(0.99 0.005 95);
+  --foreground: oklch(0.18 0.02 165);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.18 0.02 165);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --popover-foreground: oklch(0.18 0.02 165);
+
+  /* Brand — emerald */
+  --brand: oklch(0.55 0.13 162);
+  --brand-foreground: oklch(0.99 0.005 162);
+  --brand-soft: oklch(0.95 0.04 162);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  /* Secondary — warm sand */
+  --secondary: oklch(0.96 0.015 80);
+  --secondary-foreground: oklch(0.25 0.02 80);
+  --muted: oklch(0.96 0.01 95);
+  --muted-foreground: oklch(0.5 0.02 165);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand);
+
+  /* Gamification colors */
+  --xp: oklch(0.68 0.18 75);            /* amber gold for XP */
+  --streak: oklch(0.62 0.22 25);        /* warm red-orange for streaks */
+  --quest: oklch(0.6 0.15 280);         /* violet for quests */
+
+  --destructive: oklch(0.58 0.24 27);
+  --border: oklch(0.9 0.01 95);
+  --input: oklch(0.92 0.01 95);
+  --ring: var(--brand);
+
+  /* Chart palette — vibrant academic */
+  --chart-1: oklch(0.55 0.13 162);
+  --chart-2: oklch(0.68 0.18 75);
+  --chart-3: oklch(0.6 0.15 280);
+  --chart-4: oklch(0.65 0.2 200);
+  --chart-5: oklch(0.62 0.22 25);
+
+  --sidebar: oklch(0.985 0.005 162);
+  --sidebar-foreground: oklch(0.18 0.02 165);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(0.9 0.01 95);
+  --sidebar-ring: var(--brand);
 }
 
+/* Dark mode (Scholars) */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --background: oklch(0.16 0.015 165);
+  --foreground: oklch(0.97 0.005 95);
+  --card: oklch(0.21 0.02 165);
+  --card-foreground: oklch(0.97 0.005 95);
+  --popover: oklch(0.21 0.02 165);
+  --popover-foreground: oklch(0.97 0.005 95);
+
+  --brand: oklch(0.7 0.15 162);
+  --brand-foreground: oklch(0.15 0.02 165);
+  --brand-soft: oklch(0.3 0.05 162);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.27 0.015 165);
+  --secondary-foreground: oklch(0.97 0.005 95);
+  --muted: oklch(0.25 0.01 165);
+  --muted-foreground: oklch(0.7 0.015 95);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand);
+
+  --xp: oklch(0.75 0.18 75);
+  --streak: oklch(0.68 0.22 25);
+  --quest: oklch(0.7 0.17 280);
+
+  --destructive: oklch(0.7 0.2 25);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --ring: var(--brand);
+
+  --chart-1: oklch(0.7 0.15 162);
+  --chart-2: oklch(0.75 0.18 75);
+  --chart-3: oklch(0.7 0.17 280);
+  --chart-4: oklch(0.72 0.2 200);
+  --chart-5: oklch(0.68 0.22 25);
+
+  --sidebar: oklch(0.19 0.015 165);
+  --sidebar-foreground: oklch(0.97 0.005 95);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: var(--brand);
+}
+
+/* =========================================================
+   Age-Adaptive Themes
+   Applied via data-age-band attribute on <html>
+   ========================================================= */
+
+/* Little Sprouts (G1-3) — bright, playful, rounded
+   Mascot: "Sprout the Seedling" — friendly, encouraging */
+[data-age-band="sprouts"] {
+  --radius: 1rem;
+  --background: oklch(0.99 0.012 95);
+  --foreground: oklch(0.2 0.03 30);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.03 30);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.03 30);
+
+  --brand: oklch(0.7 0.18 145);        /* bright leaf green */
+  --brand-foreground: oklch(0.99 0.01 145);
+  --brand-soft: oklch(0.93 0.06 145);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.95 0.03 70);    /* sunny */
+  --secondary-foreground: oklch(0.25 0.04 70);
+  --muted: oklch(0.96 0.015 95);
+  --muted-foreground: oklch(0.45 0.02 30);
+  --accent: oklch(0.92 0.05 30);       /* warm peach */
+  --accent-foreground: oklch(0.3 0.05 30);
+
+  --xp: oklch(0.75 0.2 70);
+  --streak: oklch(0.7 0.22 25);
+  --quest: oklch(0.7 0.18 320);        /* pink */
+
+  --destructive: oklch(0.6 0.24 25);
+  --border: oklch(0.88 0.02 95);
+  --input: oklch(0.9 0.02 95);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.98 0.012 145);
+  --sidebar-foreground: oklch(0.2 0.03 30);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(0.88 0.02 95);
+  --sidebar-ring: var(--brand);
+}
+
+.dark[data-age-band="sprouts"] {
+  --background: oklch(0.18 0.02 145);
+  --foreground: oklch(0.97 0.01 95);
+  --card: oklch(0.23 0.025 145);
+  --card-foreground: oklch(0.97 0.01 95);
+  --popover: oklch(0.23 0.025 145);
+  --popover-foreground: oklch(0.97 0.01 95);
+
+  --brand: oklch(0.78 0.18 145);
+  --brand-foreground: oklch(0.15 0.02 145);
+  --brand-soft: oklch(0.3 0.06 145);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.28 0.02 145);
+  --secondary-foreground: oklch(0.97 0.01 95);
+  --muted: oklch(0.26 0.015 145);
+  --muted-foreground: oklch(0.72 0.015 95);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand);
+
+  --xp: oklch(0.8 0.2 70);
+  --streak: oklch(0.72 0.22 25);
+  --quest: oklch(0.75 0.18 320);
+
+  --destructive: oklch(0.7 0.22 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.21 0.02 145);
+  --sidebar-foreground: oklch(0.97 0.01 95);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--brand);
+}
+
+/* Explorers (G4-6) — adventurous teal + coral
+   Mascot: "Compass the Fox" — curious, brave */
+[data-age-band="explorers"] {
+  --radius: 0.875rem;
+  --background: oklch(0.99 0.008 200);
+  --foreground: oklch(0.18 0.025 220);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.025 220);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.025 220);
+
+  --brand: oklch(0.6 0.13 220);        /* ocean teal */
+  --brand-foreground: oklch(0.99 0.008 220);
+  --brand-soft: oklch(0.93 0.04 220);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.95 0.025 30);   /* coral */
+  --secondary-foreground: oklch(0.25 0.04 30);
+  --muted: oklch(0.96 0.01 200);
+  --muted-foreground: oklch(0.48 0.02 220);
+  --accent: oklch(0.92 0.05 30);
+  --accent-foreground: oklch(0.3 0.06 30);
+
+  --xp: oklch(0.72 0.2 75);
+  --streak: oklch(0.65 0.22 25);
+  --quest: oklch(0.62 0.16 280);
+
+  --destructive: oklch(0.6 0.24 25);
+  --border: oklch(0.9 0.015 200);
+  --input: oklch(0.92 0.015 200);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.985 0.01 220);
+  --sidebar-foreground: oklch(0.18 0.025 220);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(0.9 0.015 200);
+  --sidebar-ring: var(--brand);
+}
+
+.dark[data-age-band="explorers"] {
+  --background: oklch(0.17 0.02 220);
+  --foreground: oklch(0.97 0.008 200);
+  --card: oklch(0.22 0.025 220);
+  --card-foreground: oklch(0.97 0.008 200);
+  --popover: oklch(0.22 0.025 220);
+  --popover-foreground: oklch(0.97 0.008 200);
+
+  --brand: oklch(0.72 0.14 220);
+  --brand-foreground: oklch(0.15 0.02 220);
+  --brand-soft: oklch(0.3 0.05 220);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.28 0.02 220);
+  --secondary-foreground: oklch(0.97 0.008 200);
+  --muted: oklch(0.26 0.015 220);
+  --muted-foreground: oklch(0.72 0.015 200);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand);
+
+  --xp: oklch(0.78 0.2 75);
+  --streak: oklch(0.7 0.22 25);
+  --quest: oklch(0.7 0.17 280);
+
+  --destructive: oklch(0.7 0.22 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.2 0.02 220);
+  --sidebar-foreground: oklch(0.97 0.008 200);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--brand);
+}
+
+/* Scholars (G7-9) — same as default :root, defined for completeness */
+[data-age-band="scholars"] {
+  /* inherits from :root */
+}
+
+/* Masters (G10-12) — sophisticated deep emerald + bronze
+   Mascot: "Sage the Stag" — distinguished, accomplished */
+[data-age-band="masters"] {
+  --radius: 0.625rem;
+  --background: oklch(0.98 0.006 50);
+  --foreground: oklch(0.15 0.015 165);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.015 165);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.015 165);
+
+  --brand: oklch(0.45 0.1 165);        /* deep forest emerald */
+  --brand-foreground: oklch(0.98 0.006 165);
+  --brand-soft: oklch(0.92 0.03 165);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.94 0.02 60);    /* bronze */
+  --secondary-foreground: oklch(0.22 0.03 60);
+  --muted: oklch(0.96 0.008 50);
+  --muted-foreground: oklch(0.45 0.015 50);
+  --accent: oklch(0.9 0.04 60);
+  --accent-foreground: oklch(0.28 0.04 60);
+
+  --xp: oklch(0.6 0.13 60);            /* bronze XP */
+  --streak: oklch(0.55 0.18 25);
+  --quest: oklch(0.5 0.12 280);
+
+  --destructive: oklch(0.55 0.22 25);
+  --border: oklch(0.9 0.01 50);
+  --input: oklch(0.92 0.01 50);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.975 0.008 165);
+  --sidebar-foreground: oklch(0.15 0.015 165);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(0.9 0.01 50);
+  --sidebar-ring: var(--brand);
+}
+
+.dark[data-age-band="masters"] {
+  --background: oklch(0.14 0.015 165);
+  --foreground: oklch(0.96 0.008 50);
+  --card: oklch(0.19 0.02 165);
+  --card-foreground: oklch(0.96 0.008 50);
+  --popover: oklch(0.19 0.02 165);
+  --popover-foreground: oklch(0.96 0.008 50);
+
+  --brand: oklch(0.62 0.12 165);
+  --brand-foreground: oklch(0.13 0.015 165);
+  --brand-soft: oklch(0.28 0.04 165);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+
+  --secondary: oklch(0.26 0.02 60);
+  --secondary-foreground: oklch(0.96 0.008 50);
+  --muted: oklch(0.24 0.01 165);
+  --muted-foreground: oklch(0.7 0.012 50);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--brand);
+
+  --xp: oklch(0.7 0.14 60);
+  --streak: oklch(0.65 0.2 25);
+  --quest: oklch(0.62 0.14 280);
+
+  --destructive: oklch(0.68 0.22 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.17 0.015 165);
+  --sidebar-foreground: oklch(0.96 0.008 50);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--brand-soft);
+  --sidebar-accent-foreground: var(--brand);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--brand);
 }
 
 @layer base {
@@ -118,5 +419,96 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  /* Larger touch targets for younger students */
+  [data-age-band="sprouts"] button,
+  [data-age-band="sprouts"] [role="button"] {
+    min-height: 44px;
+  }
+  /* Bigger base font for younger students */
+  [data-age-band="sprouts"] {
+    font-size: 17px;
+  }
+  [data-age-band="explorers"] {
+    font-size: 16px;
+  }
+  /* Tighter, more sophisticated for masters */
+  [data-age-band="masters"] {
+    font-size: 15px;
+  }
+}
+
+/* Custom scrollbar — friendly, brand-aware */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand-soft) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--brand-soft);
+    border-radius: 999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Glassmorphism panel */
+  .glass {
+    background: color-mix(in oklch, var(--card) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+  }
+
+  /* Brand gradient text */
+  .text-gradient-brand {
+    background: linear-gradient(
+      135deg,
+      var(--brand),
+      var(--xp)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Animated XP gain */
+  @keyframes xp-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .animate-xp-pulse {
+    animation: xp-pulse 0.6s ease-in-out;
+  }
+
+  /* Mascot bounce for sprouts */
+  @keyframes mascot-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .animate-mascot {
+    animation: mascot-bounce 2.5s ease-in-out infinite;
+  }
+
+  /* Confetti / celebration */
+  @keyframes celebrate {
+    0% { transform: scale(0) rotate(0deg); opacity: 1; }
+    100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+  }
+  .animate-celebrate {
+    animation: celebrate 0.8s ease-out forwards;
+  }
+
+  /* Streak flame flicker */
+  @keyframes flame-flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    50% { transform: scale(1.05) rotate(2deg); }
+  }
+  .animate-flame {
+    animation: flame-flicker 1.2s ease-in-out infinite;
   }
 }

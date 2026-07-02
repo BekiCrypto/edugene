@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Providers } from "@/components/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,12 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Global Academy — K-12 Learning Platform",
+  title: "EduGene — K-12 Learning That Grows With You",
   description:
-    "Full K-12 learning and exam prep across Pearson Edexcel, Cambridge, British National, IB, and US Common Core curricula. Lessons, quizzes, sample exams, mind maps — offline-ready.",
+    "Master Grade 1–12 across Pearson Edexcel, Cambridge, British National, IB, and US Common Core. AI tutor, audio lessons, flashcards, quizzes, exams, and gamified study — offline-ready.",
   keywords: [
     "K-12",
-    "Academy",
+    "EduGene",
     "Pearson Edexcel",
     "Cambridge",
     "IGCSE",
@@ -28,17 +29,27 @@ export const metadata: Metadata = {
     "IB",
     "Common Core",
     "British National Curriculum",
+    "AI tutor",
+    "flashcards",
+    "spaced repetition",
   ],
-  authors: [{ name: "Global Academy" }],
+  authors: [{ name: "EduGene" }],
   manifest: "/manifest.json",
+  applicationName: "EduGene",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "EduGene",
+  },
   icons: {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Global Academy — K-12 Learning Platform",
+    title: "EduGene — K-12 Learning That Grows With You",
     description:
-      "Lessons, quizzes, sample exams, and mind maps across 5 global curricula. Offline-ready.",
+      "AI-powered K-12 learning across 5 global curricula. Audio lessons, flashcards, quizzes, exams, mind maps, gamified progress. Offline-ready.",
     type: "website",
+    siteName: "EduGene",
   },
 };
 
@@ -46,6 +57,7 @@ export const viewport: Viewport = {
   themeColor: "#0f766e",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -72,9 +84,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
       >
-        {children}
-        <Toaster />
-        <SonnerToaster richColors position="top-right" />
+        <Providers>
+          {children}
+          <Toaster />
+          <SonnerToaster richColors position="top-right" />
+        </Providers>
       </body>
     </html>
   );

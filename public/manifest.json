@@ -1,12 +1,13 @@
 {
-  "name": "Global Academy — Grade 1 to 12",
-  "short_name": "Academy",
-  "description": "Full K-12 learning platform for Pearson Edexcel, Cambridge, British National, IB, and US Common Core curricula. Offline-ready.",
+  "name": "EduGene — K-12 Learning That Grows With You",
+  "short_name": "EduGene",
+  "description": "AI-powered K-12 learning across Pearson Edexcel, Cambridge, British National, IB, and US Common Core curricula. Offline-ready.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#fafaf7",
   "theme_color": "#0f766e",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "categories": ["education", "productivity", "kids"],
   "icons": [
     {
       "src": "/logo.svg",
