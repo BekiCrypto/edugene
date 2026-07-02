@@ -1,0 +1,169 @@
+// Academy App — Global Curricula (Grade 1-12)
+// Supports: Pearson Edexcel, Cambridge IGCSE/A-Level, British National Curriculum,
+// IB (MYP/DP), US Common Core, Indian CBSE
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Curriculum {
+  id          String   @id @default(cuid())
+  code        String   @unique // e.g. "pearson-edexcel", "cambridge-igcse"
+  name        String   // e.g. "Pearson Edexcel International GCSE"
+  publisher   String   // e.g. "Pearson"
+  region      String   // e.g. "Global / UK"
+  description String
+  color       String   // brand accent
+  grades      String   // e.g. "1-12" or "9-12"
+  subjects    Subject[]
+  createdAt   DateTime @default(now())
+}
+
+model Subject {
+  id           String     @id @default(cuid())
+  curriculumId String
+  name         String     // e.g. "Mathematics"
+  slug         String     // e.g. "mathematics"
+  icon         String     // lucide icon name
+  color        String
+  description  String
+  grades       String     // e.g. "1-12"
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  lessons      Lesson[]
+  exams        SampleExam[]
+  mindMaps     MindMap[]
+  createdAt    DateTime   @default(now())
+
+  @@unique([curriculumId, slug])
+  @@index([curriculumId])
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  subjectId   String
+  grade       Int      // 1-12
+  title       String
+  slug        String
+  summary     String
+  objectives  String   // newline separated learning objectives
+  content     String   // markdown body — main course material
+  studyGuide  String   // markdown revision notes / learning guide
+  keyTerms    String   // JSON array of {term, definition}
+  examples    String   // JSON array of {title, body}
+  durationMin Int      // estimated minutes
+  difficulty  String   // "introductory" | "core" | "advanced"
+  order       Int
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  quizzes     Quiz[]
+  createdAt   DateTime @default(now())
+
+  @@unique([subjectId, slug])
+  @@index([subjectId, grade])
+}
+
+model Quiz {
+  id          String       @id @default(cuid())
+  lessonId    String
+  title       String
+  description String
+  timeLimit   Int          // minutes, 0 = untimed
+  questions   QuizQuestion[]
+  lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+}
+
+model QuizQuestion {
+  id        String   @id @default(cuid())
+  quizId    String
+  prompt    String
+  options   String   // JSON array of strings
+  answerIdx Int      // 0-based index of correct option
+  explanation String // why the answer is correct
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+}
+
+model SampleExam {
+  id          String   @id @default(cuid())
+  subjectId   String
+  title       String
+  paperCode   String   // e.g. "Paper 1: Algebra & Functions"
+  durationMin Int
+  totalMarks  Int
+  gradeLevel  Int
+  description String
+  instructions String
+  questions   ExamQuestion[]
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([subjectId, gradeLevel])
+}
+
+model ExamQuestion {
+  id           String      @id @default(cuid())
+  examId       String
+  number       Int
+  type         String      // "multiple-choice" | "short-answer" | "essay"
+  prompt       String
+  options      String?     // JSON array for MCQ
+  answerIdx    Int?        // for MCQ
+  modelAnswer  String      // model answer / mark scheme
+  marks        Int
+  explanation  String
+  topicTag     String?
+  exam         SampleExam  @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([examId])
+}
+
+model MindMap {
+  id          String   @id @default(cuid())
+  subjectId   String
+  grade       Int
+  title       String
+  description String
+  centerNode  String
+  nodesJson   String   // JSON: [{id, label, x, y, color, parent?}]
+  edgesJson   String   // JSON: [{from, to, label?}]
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([subjectId, grade])
+}
+
+model StudentProgress {
+  id            String   @id @default(cuid())
+  studentKey    String   // local student identifier (no auth required)
+  itemId        String   // lesson / quiz / exam id
+  itemType      String   // "lesson" | "quiz" | "exam"
+  status        String   // "not-started" | "in-progress" | "completed"
+  scorePercent  Int?
+  bestScore     Int?
+  attempts      Int      @default(0)
+  timeSpentMin  Int      @default(0)
+  lastVisitedAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([studentKey, itemId, itemType])
+  @@index([studentKey])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  studentKey  String
+  code        String   // e.g. "first-quiz", "exam-master"
+  title       String
+  description String
+  icon        String
+  unlockedAt  DateTime @default(now())
+
+  @@unique([studentKey, code])
+}
