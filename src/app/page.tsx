@@ -72,6 +72,8 @@ export default function Home() {
   }, []);
 
   // Check auth status + Google availability
+  // Always fetch /api/auth/status on mount — this is more reliable than
+  // depending on useSession which can be slow to initialize after a redirect
   useEffect(() => {
     fetch("/api/auth/status")
       .then((r) => r.json())
@@ -85,6 +87,14 @@ export default function Home() {
       })
       .catch(() => setAuthChecked(true));
   }, [setUser, setView]);
+
+  // Also sync from useSession when it updates (e.g. after Google OAuth redirect)
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      setUser(session.user as any);
+      setAuthChecked(true);
+    }
+  }, [session, status, setUser]);
 
   // Load curricula on mount
   useEffect(() => {

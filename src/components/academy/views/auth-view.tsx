@@ -44,14 +44,30 @@ export function AuthView() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Use manual form submission for reliable cookie setting across environments
+      // Fetch CSRF token
       const csrfRes = await fetch("/api/auth/csrf");
       const { csrfToken } = await csrfRes.json();
+      // Build a hidden form and submit it — this does a native browser navigation
+      // which reliably sets the session cookie and follows the redirect
       const form = document.createElement("form");
       form.method = "POST";
       form.action = "/api/auth/callback/guest";
-      form.innerHTML = `<input name="name" value="${(guestName || "Guest Student").replace(/"/g, '&quot;')}"><input name="grade" value="${guestGrade || "5"}"><input name="csrfToken" value="${csrfToken}"><input name="callbackUrl" value="/">`;
+      form.style.display = "none";
+      const fields = {
+        name: guestName || "Guest Student",
+        grade: guestGrade || "5",
+        csrfToken,
+        callbackUrl: "/",
+      };
+      for (const [key, value] of Object.entries(fields)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      }
       document.body.appendChild(form);
+      // This navigates the page — the React component will unmount
       form.submit();
     } catch (err: any) {
       setLoading(false);
@@ -68,7 +84,20 @@ export function AuthView() {
       const form = document.createElement("form");
       form.method = "POST";
       form.action = "/api/auth/callback/demo";
-      form.innerHTML = `<input name="email" value="${demoEmail.replace(/"/g, '&quot;')}"><input name="password" value="${demoPass.replace(/"/g, '&quot;')}"><input name="csrfToken" value="${csrfToken}"><input name="callbackUrl" value="/">`;
+      form.style.display = "none";
+      const fields = {
+        email: demoEmail,
+        password: demoPass,
+        csrfToken,
+        callbackUrl: "/",
+      };
+      for (const [key, value] of Object.entries(fields)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      }
       document.body.appendChild(form);
       form.submit();
     } catch (err: any) {
