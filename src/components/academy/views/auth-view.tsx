@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import { GraduationCap, Sparkles, Shield, BookOpen, Trophy, Headphones } from "lucide-react";
@@ -26,8 +26,14 @@ export function AuthView() {
   const [guestGrade, setGuestGrade] = useState("5");
   const [demoEmail, setDemoEmail] = useState("");
   const [demoPass, setDemoPass] = useState("");
+  const [googleEnabled, setGoogleEnabled] = useState(false);
 
-  const googleEnabled = typeof window !== "undefined" && (window as any).__EDUGENE_GOOGLE__;
+  useEffect(() => {
+    fetch("/api/auth/status")
+      .then((r) => r.json())
+      .then((d) => setGoogleEnabled(!!d.googleEnabled))
+      .catch(() => {});
+  }, []);
 
   const handleGoogle = async () => {
     setLoading(true);
@@ -130,6 +136,12 @@ export function AuthView() {
         </div>
 
         <div className="relative z-10 text-xs opacity-75">
+          <div className="flex flex-wrap gap-4 mb-2">
+            <span>📚 2,160+ lessons</span>
+            <span>🎯 8,640+ quiz questions</span>
+            <span>📝 270 sample exams</span>
+            <span>🧠 270 mind maps</span>
+          </div>
           Grades 1–3 · 4–6 · 7–9 · 10–12 — each with age-adaptive themes, mascots, and tone.
         </div>
       </div>
@@ -149,7 +161,7 @@ export function AuthView() {
                   <Button
                     onClick={handleGoogle}
                     disabled={loading}
-                    className="w-full h-12 text-base"
+                    className="w-full h-12 text-base bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
                     size="lg"
                   >
                     <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
