@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import { useAcademy } from "@/lib/academy-store";
 import { offlineStore } from "@/lib/offline-store";
 import { Card } from "@/components/ui/card";
@@ -195,64 +196,76 @@ export function LessonsView({ searchQuery }: { searchQuery?: string }) {
       )}
 
       {!loading && lessons.length > 0 && (
-        <div className="space-y-2">
-          {lessons.map((l) => {
+        <div className="space-y-2 stagger-children">
+          {lessons.map((l, idx) => {
             const prog = progress[`lesson:${l.id}`];
             const status = prog?.status ?? "not-started";
+            const difficultyColors: Record<string, string> = {
+              introductory: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
+              core: "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400",
+              advanced: "bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400",
+            };
             return (
-              <Card
+              <motion.div
                 key={l.id}
-                className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-teal-400"
-                onClick={() => {
-                  setLesson(l.id);
-                  setView("lesson");
-                  trackVisit(l.id, "lesson");
-                }}
+                whileHover={{ y: -2, scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
-                <div className="flex items-start gap-3">
-                  <StatusIcon status={status} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        Lesson {l.order}
-                      </span>
-                      <Badge
-                        variant="outline"
-                        className="text-xs capitalize"
-                      >
-                        {l.difficulty}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground flex items-center gap-1 ml-auto">
-                        <Clock size={12} /> {l.durationMin} min
-                      </span>
-                    </div>
-                    <div className="font-semibold mt-1">{l.title}</div>
-                    <div className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                      {l.summary}
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      {l.quizzes?.[0] && (
-                        <Badge variant="secondary" className="text-xs gap-1">
-                          <FileText size={10} /> Quiz: {l.quizzes[0].questions.length} Qs
+                <Card
+                  className="p-4 cursor-pointer hover:shadow-lg transition-all hover:border-brand/40 card-hover relative overflow-hidden"
+                  onClick={() => {
+                    setLesson(l.id);
+                    setView("lesson");
+                    trackVisit(l.id, "lesson");
+                  }}
+                >
+                  {/* Difficulty accent bar */}
+                  <div className={cn("absolute top-0 left-0 right-0 h-1", difficultyColors[l.difficulty] || "bg-muted")} />
+                  <div className="flex items-start gap-3">
+                    <StatusIcon status={status} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground font-medium">
+                          Lesson {l.order}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className={cn("text-xs capitalize font-medium", difficultyColors[l.difficulty])}
+                        >
+                          {l.difficulty}
                         </Badge>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="ml-auto h-7 text-xs"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setLesson(l.id);
-                          setView("lesson");
-                          trackVisit(l.id, "lesson");
-                        }}
-                      >
-                        Open <ChevronRight size={12} />
-                      </Button>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 ml-auto">
+                          <Clock size={12} /> {l.durationMin} min
+                        </span>
+                      </div>
+                      <div className="font-semibold mt-1">{l.title}</div>
+                      <div className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                        {l.summary}
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        {l.quizzes?.[0] && (
+                          <Badge variant="secondary" className="text-xs gap-1">
+                            <FileText size={10} /> Quiz: {l.quizzes[0].questions.length} Qs
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="ml-auto h-7 text-xs group"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLesson(l.id);
+                            setView("lesson");
+                            trackVisit(l.id, "lesson");
+                          }}
+                        >
+                          Open <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
             );
           })}
         </div>

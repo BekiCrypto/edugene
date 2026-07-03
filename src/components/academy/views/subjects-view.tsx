@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useAcademy } from "@/lib/academy-store";
 import { offlineStore } from "@/lib/offline-store";
 import { Card } from "@/components/ui/card";
@@ -59,25 +60,46 @@ export function SubjectsView() {
     return (
       <div className="container mx-auto px-4 py-6 max-w-5xl">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-1">Choose your curriculum</h1>
+          <motion.h1
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl font-bold mb-1"
+          >
+            Choose your curriculum 🎓
+          </motion.h1>
           <p className="text-sm text-muted-foreground">
             Pick a curriculum and grade to see available subjects and lessons.
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-3 mb-6">
-          {curricula.map((c) => (
-            <button
+        <div className="grid sm:grid-cols-2 gap-3 mb-6 stagger-children">
+          {curricula.map((c, idx) => (
+            <motion.button
               key={c.id}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setCurriculum(c.id)}
-              className="text-left p-4 rounded-xl border border-border hover:border-brand/40 hover:bg-brand-soft/30 transition-all"
+              className="text-left p-5 rounded-2xl border-2 border-border hover:border-brand/40 hover:bg-brand-soft/30 transition-all relative overflow-hidden group"
             >
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-3 h-3 rounded-full" style={{ background: c.color }} />
-                <span className="font-semibold text-sm">{c.name}</span>
+              <div
+                className="absolute top-0 left-0 right-0 h-1.5"
+                style={{ background: c.color }}
+              />
+              <div className="flex items-center gap-2 mb-2">
+                <motion.div
+                  whileHover={{ scale: 1.3, rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-4 h-4 rounded-full shadow-sm"
+                  style={{ background: c.color }}
+                />
+                <span className="font-bold text-base">{c.name}</span>
               </div>
               <div className="text-xs text-muted-foreground">{c.publisher} · {c.region}</div>
-              <div className="text-xs text-muted-foreground mt-1">Grades {c.grades}</div>
-            </button>
+              <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-muted text-foreground font-medium">
+                  Grades {c.grades}
+                </span>
+              </div>
+            </motion.button>
           ))}
         </div>
         {curricula.length === 0 && (
@@ -99,21 +121,29 @@ export function SubjectsView() {
           ← Change curriculum
         </button>
         <h1 className="text-2xl font-bold mb-1">{currentCurriculum?.name}</h1>
-        <p className="text-sm text-muted-foreground mb-4">Pick your grade to start learning.</p>
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        <p className="text-sm text-muted-foreground mb-4">Pick your grade to start learning. 🎯</p>
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 stagger-children">
           {Array.from({ length: 12 }, (_, i) => i + 1).map((g) => {
             const band = gradeToAgeBand(g);
             const mascot = AGE_BANDS[band as keyof typeof AGE_BANDS];
             return (
-              <button
+              <motion.button
                 key={g}
+                whileHover={{ y: -4, scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setGrade(g)}
-                className="p-4 rounded-xl border border-border hover:border-brand hover:bg-brand-soft/30 transition-all text-center"
+                className="p-4 rounded-2xl border-2 border-border hover:border-brand hover:bg-brand-soft/30 transition-all text-center group relative overflow-hidden"
               >
-                <div className="text-2xl mb-1">{mascot.mascotEmoji}</div>
-                <div className="font-bold text-lg">{g}</div>
-                <div className="text-xs text-muted-foreground">{mascot.label}</div>
-              </button>
+                <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+                  className="text-3xl mb-1 relative z-10"
+                >
+                  {mascot.mascotEmoji}
+                </motion.div>
+                <div className="font-bold text-xl relative z-10">{g}</div>
+                <div className="text-xs text-muted-foreground relative z-10">{mascot.label}</div>
+              </motion.button>
             );
           })}
         </div>

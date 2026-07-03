@@ -107,55 +107,99 @@ export function DashboardView() {
     <div className="container mx-auto px-4 py-6 max-w-6xl space-y-6">
       {/* Hero — level + streak + XP */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 100 }}
       >
-        <Card className="p-6 bg-gradient-to-br from-brand-soft to-card border-brand/20 overflow-hidden relative">
-          <div className="absolute top-4 right-4 text-6xl opacity-20 select-none">
-            {mascot.mascotEmoji}
+        <Card className="p-6 bg-gradient-to-br from-brand via-emerald-600 to-teal-700 text-brand-foreground border-0 overflow-hidden relative animate-gradient">
+          {/* Decorative background */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-4 right-8 text-8xl animate-float">{mascot.mascotEmoji}</div>
+            <div className="absolute -bottom-4 -left-4 text-7xl animate-float-slow">✨</div>
+            <div className="absolute top-1/2 right-1/3 text-5xl animate-twinkle">⭐</div>
           </div>
+
           <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-medium text-brand">{greeting},</span>
-              <span className="text-sm font-bold">{user?.name || "Scholar"}!</span>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2 mb-2"
+            >
+              <span className="text-sm font-medium opacity-90">{greeting},</span>
+              <span className="text-sm font-bold">{user?.name || "Scholar"}! 🎉</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1, type: "spring" }}
+              className="flex items-baseline gap-3 mb-4"
+            >
+              <div className="flex items-center gap-3">
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.05 }}
+                  className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl font-black shadow-lg"
+                >
+                  {data.level.level}
+                </motion.div>
+                <div>
+                  <h1 className="text-3xl font-bold leading-tight">Level {data.level.level}</h1>
+                  <span className="text-sm font-medium opacity-90">{data.level.title}</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="space-y-2 max-w-md">
+              <div className="flex justify-between text-xs font-medium">
+                <span className="opacity-90">{data.totalXp.toLocaleString()} XP total</span>
+                <span className="opacity-90">{data.level.xpRemaining} XP to Level {data.level.level + 1} 🚀</span>
+              </div>
+              <div className="relative h-3 bg-white/20 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${data.level.progressPct}%` }}
+                  transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+                  className="absolute h-full bg-gradient-to-r from-amber-300 to-amber-500 rounded-full progress-shine"
+                />
+              </div>
             </div>
-            <div className="flex items-baseline gap-3 mb-3">
-              <h1 className="text-3xl font-bold">Level {data.level.level}</h1>
-              <span className="text-sm font-medium text-brand">{data.level.title}</span>
-            </div>
-            <div className="space-y-1.5 max-w-md">
-              <div className="flex justify-between text-xs">
-                <span className="text-muted-foreground">{data.totalXp} XP total</span>
-                <span className="text-muted-foreground">{data.level.xpRemaining} XP to Level {data.level.level + 1}</span>
-              </div>
-              <Progress value={data.level.progressPct} className="h-2.5" />
-            </div>
-            <div className="flex flex-wrap gap-3 mt-4">
-              <div className="flex items-center gap-1.5 bg-card/80 backdrop-blur rounded-full px-3 py-1.5 border">
-                <Flame size={16} className="text-streak animate-flame" style={{ color: "var(--streak)" }} />
-                <span className="text-sm font-semibold">{streakCount} day streak</span>
-              </div>
-              <div className="flex items-center gap-1.5 bg-card/80 backdrop-blur rounded-full px-3 py-1.5 border">
-                <Zap size={16} style={{ color: "var(--xp)" }} />
-                <span className="text-sm font-semibold">{data.totalXp.toLocaleString()} XP</span>
-              </div>
-              <div className="flex items-center gap-1.5 bg-card/80 backdrop-blur rounded-full px-3 py-1.5 border">
-                <Trophy size={16} className="text-amber-500" />
-                <span className="text-sm font-semibold">{data.badges.unlocked.length}/{data.badges.total} badges</span>
-              </div>
+
+            <div className="flex flex-wrap gap-2 mt-5">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-1.5 bg-white/15 backdrop-blur rounded-full px-4 py-2 border border-white/20"
+              >
+                <Flame size={16} className="animate-flame" style={{ color: "#fbbf24" }} />
+                <span className="text-sm font-bold">{streakCount} day streak 🔥</span>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-1.5 bg-white/15 backdrop-blur rounded-full px-4 py-2 border border-white/20"
+              >
+                <Zap size={16} className="text-amber-300" />
+                <span className="text-sm font-bold">{data.totalXp.toLocaleString()} XP ⚡</span>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-1.5 bg-white/15 backdrop-blur rounded-full px-4 py-2 border border-white/20"
+              >
+                <Trophy size={16} className="text-amber-300" />
+                <span className="text-sm font-bold">{data.badges.unlocked.length}/{data.badges.total} badges 🏆</span>
+              </motion.div>
             </div>
           </div>
         </Card>
       </motion.div>
 
       {/* Stat grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 stagger-children">
         <StatCard
           icon={BookOpen}
           label="Lessons"
           value={data.stats.lessonsCompleted}
           sub={`${data.stats.lessonsStarted} started`}
           color="var(--brand)"
+          delay={0.1}
         />
         <StatCard
           icon={FileText}
@@ -163,6 +207,7 @@ export function DashboardView() {
           value={data.stats.quizzesTaken}
           sub={`${data.stats.avgQuizScore}% avg`}
           color="var(--xp)"
+          delay={0.15}
         />
         <StatCard
           icon={Award}
@@ -170,6 +215,7 @@ export function DashboardView() {
           value={data.stats.examsTaken}
           sub={`Best: ${data.stats.examBestScore}%`}
           color="var(--quest)"
+          delay={0.2}
         />
         <StatCard
           icon={Clock}
@@ -177,6 +223,7 @@ export function DashboardView() {
           value={`${Math.floor(data.stats.weekMinutes / 60)}h ${data.stats.weekMinutes % 60}m`}
           sub="study time"
           color="var(--streak)"
+          delay={0.25}
         />
       </div>
 
@@ -348,37 +395,64 @@ export function DashboardView() {
 }
 
 function StatCard({
-  icon: Icon, label, value, sub, color,
+  icon: Icon, label, value, sub, color, delay = 0,
 }: {
-  icon: any; label: string; value: string | number; sub: string; color: string;
+  icon: any; label: string; value: string | number; sub: string; color: string; delay?: number;
 }) {
   return (
-    <Card className="p-4">
-      <div className="flex items-center gap-2 mb-2">
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, type: "spring", stiffness: 100 }}
+      whileHover={{ y: -4, scale: 1.03 }}
+    >
+      <Card className="p-4 card-hover relative overflow-hidden">
+        {/* Gradient accent bar */}
         <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center"
-          style={{ background: `color-mix(in oklch, ${color} 15%, transparent)` }}
-        >
-          <Icon size={16} style={{ color }} />
+          className="absolute top-0 left-0 right-0 h-1"
+          style={{ background: `linear-gradient(90deg, ${color}, transparent)` }}
+        />
+        <div className="flex items-center gap-2 mb-2">
+          <motion.div
+            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.2 }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
+            style={{ background: `color-mix(in oklch, ${color} 15%, transparent)` }}
+          >
+            <Icon size={18} style={{ color }} />
+          </motion.div>
+          <span className="text-xs font-medium text-muted-foreground">{label}</span>
         </div>
-        <span className="text-xs text-muted-foreground">{label}</span>
-      </div>
-      <div className="text-2xl font-bold">{value}</div>
-      <div className="text-xs text-muted-foreground mt-0.5">{sub}</div>
-    </Card>
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: delay + 0.2, type: "spring" }}
+          className="text-2xl font-bold"
+        >
+          {value}
+        </motion.div>
+        <div className="text-xs text-muted-foreground mt-0.5">{sub}</div>
+      </Card>
+    </motion.div>
   );
 }
 
 function QuickAction({ icon: Icon, label, onClick }: { icon: any; label: string; onClick: () => void }) {
   return (
-    <button
+    <motion.button
+      whileHover={{ x: 4, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors text-left"
+      className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm hover:bg-brand-soft/50 transition-colors text-left group"
     >
-      <Icon size={16} className="text-muted-foreground" />
-      <span className="flex-1">{label}</span>
-      <ChevronRight size={14} className="text-muted-foreground" />
-    </button>
+      <motion.div
+        whileHover={{ rotate: [0, -10, 10, 0] }}
+        className="w-7 h-7 rounded-lg bg-brand-soft flex items-center justify-center"
+      >
+        <Icon size={15} className="text-brand" />
+      </motion.div>
+      <span className="flex-1 font-medium">{label}</span>
+      <ChevronRight size={14} className="text-muted-foreground group-hover:text-brand transition-colors" />
+    </motion.button>
   );
 }
 

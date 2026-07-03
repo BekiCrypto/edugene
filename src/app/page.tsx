@@ -23,6 +23,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { gradeToAgeBand, AGE_BANDS } from "@/lib/age-bands";
 import { AuthView } from "@/components/academy/views/auth-view";
 import { HomeView } from "@/components/academy/views/home-view";
@@ -251,21 +252,31 @@ export default function Home() {
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          <button
+          <motion.button
             onClick={() => setView("dashboard")}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             className="flex items-center gap-2 mr-2"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand to-emerald-600 flex items-center justify-center text-white shadow-sm">
+            <motion.div
+              whileHover={{ rotate: [0, -10, 10, 0] }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand to-emerald-600 flex items-center justify-center text-white shadow-lg"
+            >
               <GraduationCap size={20} />
-            </div>
+            </motion.div>
             <div className="hidden sm:block text-left">
               <div className="font-bold text-base leading-tight">EduGene</div>
               <div className="text-xs text-muted-foreground leading-tight flex items-center gap-1">
-                <span>{mascot.mascotEmoji}</span>
+                <motion.span
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  {mascot.mascotEmoji}
+                </motion.span>
                 <span>{mascot.label}</span>
               </div>
             </div>
-          </button>
+          </motion.button>
 
           {/* Search */}
           <div className="hidden md:flex flex-1 max-w-md mx-2">
@@ -289,18 +300,40 @@ export default function Home() {
           <div className="flex items-center gap-1.5 ml-auto">
             {/* XP pill */}
             {user && (
-              <Badge variant="outline" className="hidden sm:inline-flex gap-1 px-2 py-1" style={{ color: "var(--xp)" }}>
-                <Zap size={12} />
-                <span className="font-semibold">{totalXp}</span>
-              </Badge>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800"
+                style={{ color: "var(--xp)" }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Zap size={13} fill="currentColor" />
+                </motion.div>
+                <span className="font-bold text-sm">{totalXp}</span>
+              </motion.div>
             )}
 
             {/* Streak pill */}
             {user && (
-              <Badge variant="outline" className="hidden sm:inline-flex gap-1 px-2 py-1" style={{ color: "var(--streak)" }}>
-                <Flame size={12} className="animate-flame" />
-                <span className="font-semibold">0</span>
-              </Badge>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800"
+                style={{ color: "var(--streak)" }}
+              >
+                <motion.div
+                  animate={{ rotate: [0, -5, 5, 0], scale: [1, 1.15, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Flame size={13} fill="currentColor" />
+                </motion.div>
+                <span className="font-bold text-sm">0</span>
+              </motion.div>
             )}
 
             <Badge
@@ -312,24 +345,30 @@ export default function Home() {
             </Badge>
 
             {/* Theme toggle */}
-            <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="h-9 w-9">
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </Button>
+            <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
+              <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme" className="h-9 w-9">
+                {dark ? <Sun size={18} /> : <Moon size={18} />}
+              </Button>
+            </motion.div>
 
             {/* User menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 rounded-full hover:bg-muted p-1 pr-2 transition-colors">
-                  <Avatar className="h-8 w-8">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-full hover:bg-muted p-1 pr-2 transition-colors"
+                >
+                  <Avatar className="h-8 w-8 ring-2 ring-brand-soft">
                     <AvatarImage src={user?.image || undefined} />
-                    <AvatarFallback className="bg-brand-soft text-brand text-xs">
+                    <AvatarFallback className="bg-gradient-to-br from-brand to-emerald-600 text-white text-xs font-bold">
                       {(user?.name || "S").charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:block text-sm font-medium max-w-[100px] truncate">
                     {user?.name || "Student"}
                   </span>
-                </button>
+                </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
@@ -393,26 +432,46 @@ export default function Home() {
       <div className="flex-1 flex">
         {/* Sidebar (desktop) */}
         <aside className="hidden lg:block w-60 border-r border-border bg-sidebar/50">
-          <nav className="sticky top-[57px] p-3 space-y-0.5 max-h-[calc(100vh-57px)] overflow-y-auto scrollbar-thin">
-            {navItems.map((item) => {
+          <nav className="sticky top-[57px] p-3 space-y-1 max-h-[calc(100vh-57px)] overflow-y-auto scrollbar-thin">
+            {navItems.map((item, idx) => {
               const Icon = item.icon;
+              const isActive = view === item.id;
               return (
-                <button
+                <motion.button
                   key={item.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.03 }}
+                  whileHover={{ x: 3, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setView(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors",
-                    view === item.id && "bg-brand-soft text-brand font-medium"
+                    "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm transition-all relative group",
+                    isActive
+                      ? "bg-brand text-brand-foreground font-semibold shadow-md"
+                      : "hover:bg-brand-soft/50 text-foreground"
                   )}
                 >
-                  <Icon size={16} className="text-muted-foreground" />
+                  <motion.div
+                    whileHover={{ rotate: [0, -10, 10, 0] }}
+                    className={cn(isActive ? "text-brand-foreground" : "text-muted-foreground group-hover:text-brand")}
+                  >
+                    <Icon size={17} />
+                  </motion.div>
                   <span className="flex-1 text-left">{item.label}</span>
                   {item.badge ? (
-                    <Badge variant="secondary" className="text-xs">
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className={cn(
+                        "text-xs font-bold rounded-full px-2 py-0.5",
+                        isActive ? "bg-white/20" : "bg-brand-soft text-brand"
+                      )}
+                    >
                       {item.badge}
-                    </Badge>
+                    </motion.span>
                   ) : null}
-                </button>
+                </motion.button>
               );
             })}
           </nav>
